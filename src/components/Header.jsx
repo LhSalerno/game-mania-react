@@ -1,33 +1,19 @@
 import { Link } from "react-router-dom";
+import "./Header.css";
 
 function Header() {
   return (
-    <header
-      style={{
-        display: "flex",
-        justify: "space-between",
-        alignItems: "center",
-        padding: "15px 30px",
-        backgroundColor: "#1a1a1a",
-        color: "#fff",
-      }}
-    >
-      <div className="logo">
+    <header className="header-container">
+      <div className="header-logo">
         <h2>🎮 Game Mania</h2>
       </div>
 
-      <nav style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <Link
-          to="/"
-          style={{ color: "#fff", textDecoration: "none", fontWeight: "bold" }}
-        >
+      <nav className="header-nav">
+        <Link to="/" className="header-link">
           Início
         </Link>
-        <Link
-          to="/cart"
-          style={{ color: "#fff", textDecoration: "none", fontWeight: "bold" }}
-        >
-          🛒 Carrinho (0)
+        <Link to="/cart" className="header-link">
+          🛒 Carrinho <span className="cart-badge">0</span>
         </Link>
       </nav>
     </header>
