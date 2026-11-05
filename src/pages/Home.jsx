@@ -1,10 +1,18 @@
 import { products } from "../services/products";
+import ProductCard from "../components/ProductCard";
 
 function Home() {
   return (
-    <div>
-      <h2>Catálogo de Jogos - Game Mania Store</h2>
-      <p>Total de produtos cadastrados: {products.length}</p>
+    <div style={{ padding: "20px" }}>
+      <h2 style={{ color: "#fff", marginBottom: "20px" }}>
+        Catálogo de Jogos - Game Mania Store
+      </h2>
+
+      <div style={{ display: "flex", gap: "20px", flexWrap: "wrap" }}>
+        {products.map((item) => (
+          <ProductCard key={item.id} product={item} />
+        ))}
+      </div>
     </div>
   );
 }
