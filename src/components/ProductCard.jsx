@@ -1,4 +1,9 @@
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
+
 function ProductCard({ product }) {
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div
       style={{
@@ -51,6 +56,7 @@ function ProductCard({ product }) {
             R$ {product.price.toFixed(2)}
           </span>
           <button
+            onClick={() => addToCart(product)}
             style={{
               backgroundColor: "#00e676",
               color: "#121214",

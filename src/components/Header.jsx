@@ -1,7 +1,11 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import { CartContext } from "../context/CartContext";
 import "./Header.css";
 
 function Header() {
+  const { totalItems } = useContext(CartContext);
+
   return (
     <header className="header-container">
       <div className="header-logo">
@@ -13,7 +17,7 @@ function Header() {
           Início
         </Link>
         <Link to="/cart" className="header-link">
-          🛒 Carrinho <span className="cart-badge">0</span>
+          🛒 Carrinho <span className="cart-badge">{totalItems}</span>
         </Link>
       </nav>
     </header>
