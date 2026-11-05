@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
+import { formatCurrency } from "../utils/formatters";
 
 function ProductCard({ product }) {
   const { addToCart } = useContext(CartContext);
@@ -53,7 +54,7 @@ function ProductCard({ product }) {
           <span
             style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#00e676" }}
           >
-            R$ {product.price.toFixed(2)}
+            {formatCurrency(product.price)}
           </span>
           <button
             onClick={() => addToCart(product)}

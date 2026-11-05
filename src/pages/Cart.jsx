@@ -1,9 +1,11 @@
 import { useContext } from "react";
 import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { formatCurrency } from "../utils/formatters";
 
 function Cart() {
-  const { cart } = useContext(CartContext);
+  const { cart, removeFromCart, updateQuantity, totalPrice } =
+    useContext(CartContext);
 
   if (cart.length === 0) {
     return (
@@ -59,6 +61,7 @@ function Cart() {
               padding: "15px",
               borderRadius: "8px",
               gap: "15px",
+              flexWrap: "wrap",
             }}
           >
             <img
@@ -71,22 +74,95 @@ function Cart() {
                 borderRadius: "4px",
               }}
             />
-            <div style={{ flex: 1 }}>
+
+            <div style={{ flex: 1, minWidth: "150px" }}>
               <h4 style={{ margin: "0 0 5px 0" }}>{item.title}</h4>
               <span style={{ fontSize: "0.85rem", color: "#00e676" }}>
                 {item.category}
               </span>
             </div>
-            <div style={{ textAlign: "right" }}>
-              <p style={{ margin: "0", fontWeight: "bold" }}>
-                R$ {item.price.toFixed(2)}
+
+            {/* Controles de Quantidade */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <button
+                onClick={() => updateQuantity(item.id, -1)}
+                style={{
+                  backgroundColor: "#333",
+                  color: "#fff",
+                  border: "none",
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                -
+              </button>
+
+              <span style={{ fontWeight: "bold" }}>{item.quantity}</span>
+
+              <button
+                onClick={() => updateQuantity(item.id, 1)}
+                style={{
+                  backgroundColor: "#333",
+                  color: "#fff",
+                  border: "none",
+                  width: "28px",
+                  height: "28px",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                }}
+              >
+                +
+              </button>
+            </div>
+
+            {/* Preço Subtotal Formatado e Botão Remover */}
+            <div style={{ textAlign: "right", minWidth: "110px" }}>
+              <p style={{ margin: "0", fontWeight: "bold", color: "#00e676" }}>
+                {formatCurrency(item.price * item.quantity)}
               </p>
-              <span style={{ fontSize: "0.85rem", color: "#b2b2b2" }}>
-                Qtd: {item.quantity}
-              </span>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: "#ff4d4d",
+                  fontSize: "0.8rem",
+                  cursor: "pointer",
+                  marginTop: "5px",
+                  textDecoration: "underline",
+                }}
+              >
+                Remover
+              </button>
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Resumo do Valor Total Formatado */}
+      <div
+        style={{
+          marginTop: "30px",
+          padding: "20px",
+          backgroundColor: "#1e1e24",
+          borderRadius: "8px",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <span style={{ fontSize: "1.2rem", fontWeight: "bold" }}>
+          Total da Compra:
+        </span>
+        <span
+          style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#00e676" }}
+        >
+          {formatCurrency(totalPrice)}
+        </span>
       </div>
     </div>
   );
