@@ -8,42 +8,34 @@ function ProductCard({ product }) {
   return (
     <div
       style={{
-        backgroundColor: "#121214",
+        backgroundColor: "#111418",
         borderRadius: "12px",
         overflow: "hidden",
-        width: "260px",
-        border: "1px solid #202024",
-        boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+        border: "1px solid #1e232a",
         color: "#fff",
         display: "flex",
         flexDirection: "column",
-        transition:
-          "transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-6px)";
-        e.currentTarget.style.borderColor = "#00e676";
-        e.currentTarget.style.boxShadow = "0 8px 24px rgba(0,230,118,0.15)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(0)";
-        e.currentTarget.style.borderColor = "#202024";
-        e.currentTarget.style.boxShadow = "0 4px 16px rgba(0,0,0,0.4)";
+        height: "100%",
+        position: "relative",
       }}
     >
-      <div style={{ width: "100%", height: "160px", overflow: "hidden" }}>
+      {/* Imagem do Produto */}
+      <div
+        style={{
+          width: "100%",
+          height: "170px",
+          overflow: "hidden",
+          position: "relative",
+        }}
+      >
         <img
           src={product.image}
           alt={product.title}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.3s",
-          }}
+          style={{ width: "100%", height: "100%", objectFit: "cover" }}
         />
       </div>
 
+      {/* Conteúdo */}
       <div
         style={{
           padding: "16px",
@@ -53,79 +45,114 @@ function ProductCard({ product }) {
           flex: 1,
         }}
       >
-        <span
-          style={{
-            fontSize: "0.75rem",
-            color: "#00e676",
-            fontWeight: "bold",
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-          }}
-        >
-          {product.category}
-        </span>
-
-        <h3
-          style={{
-            fontSize: "1rem",
-            margin: "0",
-            fontWeight: "600",
-            lineHeight: "1.4",
-          }}
-        >
-          {product.title}
-        </h3>
-
-        <p
-          style={{
-            fontSize: "0.85rem",
-            color: "#8d8d99",
-            flex: 1,
-            margin: "0",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-          }}
-        >
-          {product.description}
-        </p>
-
+        {/* Título + Ícones de Plataforma */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            alignItems: "center",
-            marginTop: "12px",
-            paddingTop: "12px",
-            borderTop: "1px solid #202024",
+            alignItems: "flex-start",
+            gap: "8px",
           }}
         >
-          <span
-            style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#00e676" }}
-          >
-            {formatCurrency(product.price)}
-          </span>
-
-          <button
-            onClick={() => addToCart(product)}
+          <h3
             style={{
-              backgroundColor: "#00e676",
-              color: "#121214",
-              border: "none",
-              padding: "8px 14px",
-              borderRadius: "6px",
-              fontWeight: "bold",
-              cursor: "pointer",
-              transition: "background-color 0.2s, transform 0.1s",
+              fontSize: "0.85rem",
+              margin: "0",
+              fontWeight: "800",
+              letterSpacing: "0.5px",
+              color: "#fff",
+              textTransform: "uppercase",
             }}
-            onMouseOver={(e) => (e.target.style.backgroundColor = "#00b359")}
-            onMouseOut={(e) => (e.target.style.backgroundColor = "#00e676")}
-            onMouseDown={(e) => (e.target.style.transform = "scale(0.95)")}
-            onMouseUp={(e) => (e.target.style.transform = "scale(1)")}
           >
-            Comprar
-          </button>
+            {product.title}
+          </h3>
+          <div
+            style={{
+              display: "flex",
+              gap: "4px",
+              color: "#8a94a6",
+              fontSize: "0.7rem",
+              fontWeight: "bold",
+            }}
+          >
+            {product.platforms?.map((p) => (
+              <span
+                key={p}
+                style={{
+                  backgroundColor: "#1b2028",
+                  padding: "2px 4px",
+                  borderRadius: "4px",
+                }}
+              >
+                {p}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Avaliação por Estrelas */}
+        <div
+          style={{
+            color: "#00e676",
+            fontSize: "0.75rem",
+            letterSpacing: "2px",
+          }}
+        >
+          {"★".repeat(product.rating || 5)}
+        </div>
+
+        {/* Bloco de Preços e Botão */}
+        <div style={{ marginTop: "auto", paddingTop: "10px" }}>
+          {product.oldPrice && (
+            <div
+              style={{
+                fontSize: "0.75rem",
+                color: "#8a94a6",
+                textDecoration: "line-through",
+              }}
+            >
+              {formatCurrency(product.oldPrice)}
+            </div>
+          )}
+
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: "4px",
+            }}
+          >
+            <span
+              style={{
+                fontSize: "1.1rem",
+                fontWeight: "900",
+                color: "#00e676",
+              }}
+            >
+              {formatCurrency(product.price)}
+            </span>
+
+            <button
+              onClick={() => addToCart(product)}
+              style={{
+                backgroundColor: "#00e676",
+                color: "#09090b",
+                border: "none",
+                padding: "8px 12px",
+                borderRadius: "6px",
+                fontWeight: "900",
+                cursor: "pointer",
+                fontSize: "0.7rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                textTransform: "uppercase",
+              }}
+            >
+              <span>🛒</span> ADICIONAR AO CARRINHO
+            </button>
+          </div>
         </div>
       </div>
     </div>

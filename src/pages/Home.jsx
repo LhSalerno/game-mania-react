@@ -1,111 +1,96 @@
-import { useState } from "react";
 import { products } from "../services/products";
 import ProductCard from "../components/ProductCard";
 
-function Home() {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("Todos");
-
-  // Extrair categorias únicas dos produtos para criar os botões dinamicamente
-  const categories = [
-    "Todos",
-    ...new Set(products.map((item) => item.category)),
-  ];
-
-  // Filtrar produtos com base na busca e na categoria selecionada
+function Home({ searchTerm = "", activeCategory = "TODOS" }) {
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase());
-
     const matchesCategory =
-      selectedCategory === "Todos" || product.category === selectedCategory;
-
+      activeCategory === "TODOS" || product.category === activeCategory;
     return matchesSearch && matchesCategory;
   });
 
   return (
     <div
       style={{
-        padding: "20px",
-        maxWidth: "1200px",
+        padding: "24px",
+        maxWidth: "1400px",
         margin: "0 auto",
         color: "#fff",
       }}
     >
-      {/* Barra de Pesquisa e Filtros */}
+      {/* Bento Grid: 4 colunas estritas */}
       <div
         style={{
-          display: "flex",
-          flexDirection: "column",
+          display: "grid",
+          gridTemplateColumns: "repeat(4, 1fr)",
           gap: "20px",
-          marginBottom: "30px",
         }}
       >
-        {/* Input de Busca */}
-        <input
-          type="text"
-          placeholder="Pesquisar jogos, consoles, acessórios..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{
-            padding: "12px 16px",
-            borderRadius: "8px",
-            backgroundColor: "#1e1e24",
-            border: "1px solid #333",
-            color: "#fff",
-            fontSize: "1rem",
-            outline: "none",
-            width: "100%",
-            maxWidth: "500px",
-          }}
-        />
+        {/* Renderiza os primeiros 3 cards */}
+        {filteredProducts.slice(0, 3).map((product) => (
+          <div key={product.id} style={{ gridColumn: "span 1" }}>
+            <ProductCard product={product} />
+          </div>
+        ))}
 
-        {/* Botões de Categoria */}
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
-          {categories.map((category) => (
-            <button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
+        {/* 4ª Coluna: Bloco de Destaque GEEK HUB */}
+        {activeCategory === "TODOS" && (
+          <div
+            style={{
+              gridColumn: "span 1",
+              backgroundColor: "#06160e",
+              border: "1px solid rgba(0, 230, 118, 0.4)",
+              borderRadius: "12px",
+              padding: "20px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              textAlign: "center",
+              boxShadow: "inset 0 0 40px rgba(0,230,118,0.08)",
+            }}
+          >
+            <h2
               style={{
-                backgroundColor:
-                  selectedCategory === category ? "#00e676" : "#1e1e24",
-                color: selectedCategory === category ? "#121214" : "#fff",
-                border: "1px solid #333",
-                padding: "8px 16px",
-                borderRadius: "20px",
-                cursor: "pointer",
-                fontWeight: "bold",
-                fontSize: "0.9rem",
-                transition: "all 0.2s",
+                fontSize: "2.8rem",
+                fontWeight: "900",
+                color: "#00e676",
+                letterSpacing: "3px",
+                margin: 0,
+                textShadow: "0 0 20px rgba(0,230,118,0.5)",
               }}
             >
-              {category}
-            </button>
-          ))}
-        </div>
-      </div>
+              GEEK
+            </h2>
+            <h2
+              style={{
+                fontSize: "2.8rem",
+                fontWeight: "900",
+                color: "#00e676",
+                letterSpacing: "3px",
+                margin: 0,
+                textShadow: "0 0 20px rgba(0,230,118,0.5)",
+              }}
+            >
+              HUB
+            </h2>
+          </div>
+        )}
 
-      {/* Vitrine de Produtos */}
-      {filteredProducts.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "40px", color: "#b2b2b2" }}>
-          <h3>Nenhum produto encontrado 🔍</h3>
-          <p>Tente procurar por outro termo ou limpar os filtros.</p>
-        </div>
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            gap: "20px",
-            flexWrap: "wrap",
-            justifyContent: "flex-start",
-          }}
-        >
-          {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      )}
+        {/* Restante dos cards */}
+        {filteredProducts.slice(3).map((product) => (
+          <div
+            key={product.id}
+            style={{
+              gridColumn: product.featured ? "span 2" : "span 1",
+            }}
+          >
+            <ProductCard product={product} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
