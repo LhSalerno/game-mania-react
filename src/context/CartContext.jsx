@@ -1,9 +1,18 @@
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  // Inicializa o estado lendo do localStorage (se houver dados salvos)
+  const [cart, setCart] = useState(() => {
+    const savedCart = localStorage.getItem("@GameMania:cart");
+    return savedCart ? JSON.parse(savedCart) : [];
+  });
+
+  // Salva no localStorage sempre que o carrinho for alterado
+  useEffect(() => {
+    localStorage.setItem("@GameMania:cart", JSON.stringify(cart));
+  }, [cart]);
 
   // Adicionar ao carrinho
   const addToCart = (product) => {
