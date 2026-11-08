@@ -4,9 +4,12 @@ import { CartProvider, CartContext } from "./context/CartContext";
 import { products } from "./services/products";
 import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
+import HeroCarousel from "./components/HeroCarousel";
 
-// Componente da Página Principal (Catálogo)
+// Componente da Página Principal (Catálogo com Carrossel e Vitrine Estratégica)
 function Home({ searchTerm, activeCategory, setActiveCategory }) {
+  const { addToCart } = useContext(CartContext);
+
   const filteredProducts = products.filter((product) => {
     const matchesSearch =
       product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -18,76 +21,12 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
 
   return (
     <div style={{ maxWidth: "1400px", margin: "0 auto", padding: "32px 24px" }}>
-      {/* Banner / Hero Section de Elite */}
-      <div
-        style={{
-          background: "linear-gradient(135deg, #101826 0%, #0b0f17 100%)",
-          border: "1px solid #1e293b",
-          borderRadius: "16px",
-          padding: "40px",
-          marginBottom: "40px",
-          position: "relative",
-          overflow: "hidden",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-        }}
-      >
-        <div style={{ position: "relative", zIndex: 2, maxWidth: "600px" }}>
-          <span
-            style={{
-              color: "#00e676",
-              fontSize: "0.75rem",
-              fontWeight: "900",
-              letterSpacing: "3px",
-              textTransform: "uppercase",
-              display: "block",
-              marginBottom: "8px",
-            }}
-          >
-            ⚡ Temporada de Ofertas Elite
-          </span>
-          <h2
-            style={{
-              color: "#fff",
-              fontSize: "2.2rem",
-              fontWeight: "900",
-              margin: "0 0 12px 0",
-              lineHeight: "1.2",
-            }}
-          >
-            DOMINE O JOGO COM PREÇOS ABSOLUTOS
-          </h2>
-          <p
-            style={{
-              color: "#94a3b8",
-              fontSize: "0.95rem",
-              margin: "0 0 24px 0",
-              lineHeight: "1.5",
-            }}
-          >
-            Explore lançamentos exclusivos, consoles de nova geração e
-            equipamentos de alto desempenho para o seu setup gamer.
-          </p>
-          <button
-            onClick={() => setActiveCategory("Lançamentos")}
-            style={{
-              backgroundColor: "#00e676",
-              color: "#07090e",
-              border: "none",
-              padding: "12px 24px",
-              borderRadius: "8px",
-              fontWeight: "900",
-              fontSize: "0.85rem",
-              cursor: "pointer",
-              boxShadow: "0 0 20px rgba(0, 230, 118, 0.4)",
-              transition: "all 0.2s ease",
-            }}
-          >
-            VER LANÇAMENTOS
-          </button>
-        </div>
-      </div>
+      {/* Carrossel de Destaques (Exibido apenas na aba TODOS ou quando não há busca ativa) */}
+      {activeCategory === "TODOS" && !searchTerm && (
+        <HeroCarousel onAddToCart={addToCart} />
+      )}
 
-      {/* Cabeçalho da Listagem */}
+      {/* Cabeçalho da Listagem / Vitrine */}
       <div
         style={{
           display: "flex",
@@ -96,30 +35,50 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
           marginBottom: "24px",
         }}
       >
-        <h3
-          style={{
-            color: "#fff",
-            fontSize: "1.25rem",
-            fontWeight: "800",
-            margin: 0,
-            letterSpacing: "0.5px",
-          }}
-        >
-          {activeCategory === "TODOS"
-            ? "DESTAQUES DA VITRINE"
-            : `CATEGORIA: ${activeCategory.toUpperCase()}`}
-        </h3>
+        <div>
+          <h3
+            style={{
+              color: "#fff",
+              fontSize: "1.25rem",
+              fontWeight: "800",
+              margin: "0 0 4px 0",
+              letterSpacing: "0.5px",
+            }}
+          >
+            {activeCategory === "TODOS"
+              ? "VITRINE DE ELITE • TODOS OS PRODUTOS"
+              : `CATEGORIA: ${activeCategory.toUpperCase()}`}
+          </h3>
+          <p
+            style={{
+              color: "#64748b",
+              fontSize: "0.78rem",
+              margin: 0,
+              fontWeight: "700",
+            }}
+          >
+            Explorando equipamentos e jogos com certificação de autenticidade
+          </p>
+        </div>
         <span
-          style={{ color: "#64748b", fontSize: "0.85rem", fontWeight: "700" }}
+          style={{
+            color: "#00e676",
+            fontSize: "0.85rem",
+            fontWeight: "800",
+            backgroundColor: "rgba(0,230,118,0.08)",
+            padding: "6px 12px",
+            borderRadius: "6px",
+            border: "1px solid rgba(0,230,118,0.2)",
+          }}
         >
           {filteredProducts.length}{" "}
           {filteredProducts.length === 1
-            ? "item encontrado"
-            : "itens encontrados"}
+            ? "item disponível"
+            : "itens disponíveis"}
         </span>
       </div>
 
-      {/* Grelha de Produtos */}
+      {/* Grelha de Produtos com Alta Conversão */}
       {filteredProducts.length > 0 ? (
         <div
           style={{
@@ -134,10 +93,27 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
         </div>
       ) : (
         <div
-          style={{ textAlign: "center", padding: "60px 0", color: "#64748b" }}
+          style={{
+            backgroundColor: "#121620",
+            border: "1px solid #222d42",
+            borderRadius: "12px",
+            padding: "60px",
+            textAlign: "center",
+            color: "#64748b",
+          }}
         >
-          <p style={{ fontSize: "1.1rem", fontWeight: "700" }}>
-            Nenhum produto encontrado para a sua busca.
+          <p
+            style={{
+              fontSize: "1.1rem",
+              fontWeight: "800",
+              color: "#fff",
+              marginBottom: "8px",
+            }}
+          >
+            Nenhum item encontrado
+          </p>
+          <p style={{ fontSize: "0.85rem", margin: 0 }}>
+            Tente pesquisar por outro termo ou selecione a categoria "TODOS".
           </p>
         </div>
       )}
