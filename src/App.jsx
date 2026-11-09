@@ -119,7 +119,7 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
   );
 }
 
-// Componente da Página do Carrinho com Integração ViaCEP, Máscara e Animação Neon
+// Componente da Página do Carrinho com Identidade "Entrega de Outro Mundo 🛸" e ViaCEP
 function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, totalPrice } =
     useContext(CartContext);
@@ -361,11 +361,11 @@ function CartPage() {
             ))}
           </div>
 
-          {/* Lado Direito: Sumário, Frete ViaCEP e Cupons */}
+          {/* Lado Direito: Sumário, Frete "Entrega de Outro Mundo" e Cupons */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {/* Bloco de Consulta de CEP com Histórico e Animação Neon */}
+            {/* Bloco de Frete com Identidade "Entrega de Outro Mundo 🛸" */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -374,16 +374,39 @@ function CartPage() {
                 padding: "20px",
               }}
             >
-              <h4
+              <div
                 style={{
-                  color: "#fff",
-                  fontSize: "0.9rem",
-                  fontWeight: "800",
-                  margin: "0 0 12px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  marginBottom: "12px",
                 }}
               >
-                CONSULTA DE CEP & FRETE
-              </h4>
+                <span style={{ fontSize: "1.3rem" }}>🛸</span>
+                <div>
+                  <h4
+                    style={{
+                      color: "#fff",
+                      fontSize: "0.9rem",
+                      fontWeight: "800",
+                      margin: 0,
+                    }}
+                  >
+                    ENTREGA DE OUTRO MUNDO
+                  </h4>
+                  <p
+                    style={{
+                      color: "#64748b",
+                      fontSize: "0.72rem",
+                      margin: "2px 0 0 0",
+                      fontWeight: "700",
+                    }}
+                  >
+                    Velocidade interestelar direto para a sua base.
+                  </p>
+                </div>
+              </div>
+
               <div
                 style={{ display: "flex", gap: "8px", position: "relative" }}
               >
@@ -446,7 +469,7 @@ function CartPage() {
                       letterSpacing: "0.5px",
                     }}
                   >
-                    RASTREANDO LOGÍSTICA NACIONAL...
+                    CONECTANDO COM A NAVE MÃE...
                   </span>
                 </div>
               )}
@@ -472,7 +495,7 @@ function CartPage() {
                       marginBottom: "4px",
                     }}
                   >
-                    📍 ENDEREÇO VALIDADO:
+                    📍 BASE DE DESTINO VALIDADA:
                   </span>
                   <p
                     style={{
