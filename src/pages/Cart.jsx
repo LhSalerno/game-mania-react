@@ -85,7 +85,7 @@ function Cart() {
             {/* Controles de Quantidade */}
             <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
               <button
-                onClick={() => updateQuantity(item.id, -1)}
+                onClick={() => updateQuantity(item.id, item.quantity - 1)}
                 style={{
                   backgroundColor: "#333",
                   color: "#fff",
@@ -103,7 +103,7 @@ function Cart() {
               <span style={{ fontWeight: "bold" }}>{item.quantity}</span>
 
               <button
-                onClick={() => updateQuantity(item.id, 1)}
+                onClick={() => updateQuantity(item.id, item.quantity + 1)}
                 style={{
                   backgroundColor: "#333",
                   color: "#fff",

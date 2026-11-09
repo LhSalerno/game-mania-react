@@ -35,15 +35,15 @@ export function CartProvider({ children }) {
   };
 
   // Alterar quantidade (+1 ou -1)
-  const updateQuantity = (id, delta) => {
+  const updateQuantity = (id, newQuantity) => {
+    if (newQuantity <= 0) {
+      removeFromCard(id);
+      return;
+    }
     setCart((prevCart) =>
-      prevCart.map((item) => {
-        if (item.id === id) {
-          const newQuantity = item.quantity + delta;
-          return newQuantity > 0 ? { ...item, quantity: newQuantity } : item;
-        }
-        return item;
-      }),
+      prevCart.map((item) =>
+        item.id === id ? { ...item, quantity: newQuantity } : item,
+      ),
     );
   };
 
