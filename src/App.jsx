@@ -2,6 +2,7 @@ import { useState, useContext } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { CartProvider, CartContext } from "./context/CartContext";
 import { products } from "./services/products";
+import { formatCurrency } from "./utils/formatters";
 import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
 import HeroCarousel from "./components/HeroCarousel";
@@ -291,7 +292,7 @@ function CartPage() {
                       fontSize: "0.9rem",
                     }}
                   >
-                    R$ {item.price.toFixed(2).replace(".", ",")}
+                    {formatCurrency(item.price)}
                   </span>
                 </div>
                 <div
@@ -503,7 +504,7 @@ function CartPage() {
                         fontWeight: "900",
                       }}
                     >
-                      R$ {shippingValue.toFixed(2).replace(".", ",")}
+                      {formatCurrency(shippingValue)}
                     </span>
                   </div>
                 </div>
@@ -600,7 +601,7 @@ function CartPage() {
               >
                 <span>Subtotal:</span>
                 <span style={{ color: "#fff", fontWeight: "700" }}>
-                  R$ {totalPrice.toFixed(2).replace(".", ",")}
+                  {formatCurrency(totalPrice)}
                 </span>
               </div>
 
@@ -615,7 +616,7 @@ function CartPage() {
                 >
                   <span>Desconto ({discount * 100}%):</span>
                   <span style={{ fontWeight: "700" }}>
-                    - R$ {discountAmount.toFixed(2).replace(".", ",")}
+                    - {formatCurrency(discountAmount)}
                   </span>
                 </div>
               )}
@@ -631,7 +632,7 @@ function CartPage() {
                 <span>Frete:</span>
                 <span style={{ color: "#fff", fontWeight: "700" }}>
                   {shippingValue !== null
-                    ? `R$ ${shippingValue.toFixed(2).replace(".", ",")}`
+                    ? formatCurrency(shippingValue)
                     : "Informe o CEP"}
                 </span>
               </div>
@@ -661,7 +662,7 @@ function CartPage() {
                     fontWeight: "900",
                   }}
                 >
-                  R$ {finalOrderTotal.toFixed(2).replace(".", ",")}
+                  {formatCurrency(finalOrderTotal)}
                 </span>
               </div>
 
