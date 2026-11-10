@@ -1,16 +1,82 @@
-# React + Vite
+# 🛸 Game Mania Store | A loja de Outro Mundo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> "Sinal recebido, Comandante!" Uma imersão sci-fi no e-commerce de games, onde a alta performance encontra a diversão intergaláctica. Desenvolvido por quem vive a tecnologia e construído com paixão linha por linha.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌌 A História por Trás da Nave (Nossa Origem)
 
-## React Compiler
+A **Game Mania Store** nasceu de um sonho real: criar um e-commerce que fugisse daquele padrão sem graça e engessado que a gente vê por aí. Quem disse que comprar um console de última geração ou caçar um jogo retro precisa ser uma experiência burocrática e fria?
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Aqui, a gente transformou a navegação em uma verdadeira viagem espacial. Queremos que qualquer visitante — seja um recrutador avaliando código ou um gamer procurando seu próximo equipamento — abra a página e sinta um sorriso no rosto ao trombar com as nossas piadas de bordo, o rastreio de rota estelar e o humor descontraído que colocamos em cada canto da aplicação. Porque tecnologia boa é aquela que funciona com excelência, mas tem alma e personalidade.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🤝 Parceria de Comando (Humana & AI)
+
+Este projeto não foi gerado por robôs de forma automática; ele foi **idealizado, estruturado e esculpido a quatro mãos** pelo desenvolvedor **Luis Henrique Salerno** com a mentoria e o suporte técnico do **Gemini** como copiloto de engenharia. Cada decisão de arquitetura, cada componente React, cada tratamento de estado e cada detalhe de interface passou pelo crivo humano, garantindo que o código reflita a verdadeira identidade e a evolução técnica do autor.
+
+---
+
+## 🚀 O Que Torna a Game Mania Store Única?
+
+- **Identidade Visual Marcante (Sem Preconceitos):** Nada de interfaces corporativas chatas. Desenhamos um visual escuro e imersivo com tons neon (`#00e676`), focado em uma experiência de alto nível, porém aberta, receptiva e feita para todos os públicos.
+- **Humor e Easter Eggs na Navegação:** Mensagens dinâmicas que interagem com o usuário (como o _Comando de Suprimentos_ e a _Rota Interestelar_), transformando um carrinho de compras comum em uma base de lançamento espacial.
+- **Experiência de Compra Fluida e Real:**
+  - Identificação interativa do comandante.
+  - Cálculo de frete em tempo real integrado via API ViaCEP.
+  - Sistema de cupons de desconto dinâmicos.
+  - Limpeza automática de estado e carrinho após a transmissão do pedido.
+
+---
+
+## 🛠️ Mapeamento Técnico & Arquitetura
+
+O projeto foi estruturado seguindo padrões de mercado de uma Single Page Application (SPA) moderna, componentizada e altamente escalável:
+
+```text
+game-mania-store/
+├── public/                  # Arquivos estáticos e recursos visuais
+├── src/
+│   ├── components/          # Componentes modulares reutilizáveis
+│   │   ├── Header.jsx       # Cabeçalho com navegação e busca em tempo real
+│   │   ├── ProductCard.jsx  # Cards de produtos da vitrine
+│   │   └── HeroCarousel.jsx # Carrossel interativo de destaque estelar
+│   ├── context/
+│   │   └── CartContext.jsx  # Gerenciamento de estado global do carrinho e persistência
+│   ├── services/
+│   │   └── products.js      # Mock estruturado do catálogo de produtos
+│   ├── utils/
+│   │   └── formatters.js    # Utilitários de formatação (ex: moeda BRL)
+│   ├── App.jsx              # Roteamento central e layout estrutural da SPA
+│   ├── index.css            # Design system e estilização global
+│   └── main.jsx             # Ponto de entrada da aplicação React
+├── package.json             # Dependências e scripts do projeto (Vite, React, Router)
+└── README.md                # O diário de bordo oficial da nave
+```
+
+---
+
+## 💻 Tecnologias Empregadas
+
+- **React.js & Vite:** Performance máxima.
+- **React Router DOM:** Rotas fluidas.
+- **Context API:** Gestão de estado global.
+- **ViaCEP:** Integração de frete.
+- **LocalStorage:** Persistência de sessões.
+
+---
+
+## ⚙️ Como Executar e Subir
+
+git clone https://github.com/LhSalerno/game-mania-react.git  
+cd game-mania-react  
+npm install  
+npm run dev
+
+---
+
+👨‍💻 O Comandante  
+Desenvolvido por  
+Luis Henrique Salerno.  
+GitHub: @LuisSalerno
