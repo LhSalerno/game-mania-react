@@ -34,10 +34,15 @@ export function CartProvider({ children }) {
     setCart((prevCart) => prevCart.filter((item) => item.id !== id));
   };
 
+  // Esvaziar o carrinho inteiro (Adicionado aqui!)
+  const clearCart = () => {
+    setCart([]);
+  };
+
   // Alterar quantidade (+1 ou -1)
   const updateQuantity = (id, newQuantity) => {
     if (newQuantity <= 0) {
-      removeFromCard(id);
+      removeFromCart(id); // Corrigido de removeFromCard para removeFromCart
       return;
     }
     setCart((prevCart) =>
@@ -62,6 +67,7 @@ export function CartProvider({ children }) {
         cart,
         addToCart,
         removeFromCart,
+        clearCart, // Exposta para uso no App.jsx
         updateQuantity,
         totalItems,
         totalPrice,

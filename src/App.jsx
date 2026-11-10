@@ -119,7 +119,7 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
   );
 }
 
-// Componente da Página do Carrinho com Identidade "Entrega de Outro Mundo 🛸" e ViaCEP
+// Componente da Página do Carrinho com Identidade Sci-Fi / Cyberpunk Imersiva
 function CartPage() {
   const { cart, removeFromCart, updateQuantity, clearCart, totalPrice } =
     useContext(CartContext);
@@ -132,6 +132,10 @@ function CartPage() {
   const [couponInput, setCouponInput] = useState("");
   const [discount, setDiscount] = useState(0);
   const [couponMessage, setCouponMessage] = useState(null);
+
+  // Estados com os termos imersivos validados
+  const [clientName, setClientName] = useState("");
+  const [orderDispatched, setOrderDispatched] = useState(false);
 
   const handleCepChange = async (e) => {
     let value = e.target.value.replace(/\D/g, "");
@@ -186,6 +190,28 @@ function CartPage() {
     }
   };
 
+  const handleFinalizeOrder = () => {
+    if (!clientName.trim()) {
+      alert(
+        "Comandante, informe suas credenciais (Nome) para autorizar o envio.",
+      );
+      return;
+    }
+
+    if (!addressData) {
+      alert(
+        "Comandante, precisamos de um CEP válido para traçar as coordenadas da base.",
+      );
+      return;
+    }
+
+    // Dispara a tela de transmissão concluída com sucesso
+    setOrderDispatched(true);
+
+    // Esvazia o carrinho de compras efetivamente no contexto
+    clearCart();
+  };
+
   const shippingCost = shippingValue !== null ? shippingValue : 0;
   const discountAmount = totalPrice * discount;
   const finalOrderTotal = totalPrice - discountAmount + shippingCost;
@@ -204,7 +230,62 @@ function CartPage() {
         MEU CARRINHO DE COMPRAS
       </h2>
 
-      {cart.length === 0 ? (
+      {orderDispatched ? (
+        /* 3. Transmissão Concluída com Sucesso (Tela de Sucesso Imersiva) */
+        <div
+          style={{
+            backgroundColor: "#121620",
+            border: "1px solid #00e676",
+            borderRadius: "16px",
+            padding: "50px",
+            textAlign: "center",
+            boxShadow: "0 0 30px rgba(0, 230, 118, 0.15)",
+          }}
+        >
+          <div style={{ fontSize: "3rem", marginBottom: "16px" }}>🛸🛰️</div>
+          <h3
+            style={{
+              color: "#00e676",
+              fontSize: "1.3rem",
+              fontWeight: "900",
+              marginBottom: "16px",
+              letterSpacing: "0.5px",
+            }}
+          >
+            TRANSMISSÃO CONCLUÍDA COM SUCESSO!
+          </h3>
+          <p
+            style={{
+              color: "#cbd5e1",
+              fontSize: "0.95rem",
+              lineHeight: "1.6",
+              maxWidth: "650px",
+              margin: "0 auto 24px auto",
+            }}
+          >
+            Identidade confirmada, Comandante{" "}
+            <strong>{clientName.toUpperCase()}</strong>. Seus equipamentos já
+            estão sendo encapsulados no hangar principal para envio imediato.
+            Fique atento aos canais de comunicação: as coordenadas de rastreio
+            chegarão em breve à sua base.
+          </p>
+          <Link
+            to="/"
+            onClick={() => setOrderDispatched(false)}
+            style={{
+              backgroundColor: "#00e676",
+              color: "#07090e",
+              padding: "12px 28px",
+              borderRadius: "8px",
+              textDecoration: "none",
+              fontWeight: "900",
+              fontSize: "0.85rem",
+            }}
+          >
+            RETORNAR À VITRINE ESTELAR
+          </Link>
+        </div>
+      ) : cart.length === 0 ? (
         <div
           style={{
             backgroundColor: "#121620",
@@ -361,11 +442,62 @@ function CartPage() {
             ))}
           </div>
 
-          {/* Lado Direito: Sumário, Frete "Entrega de Outro Mundo" e Cupons */}
+          {/* Lado Direito: Comando de Suprimentos, Rota Interestelar, Cupons e Sumário */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {/* Bloco de Frete com Identidade "Entrega de Outro Mundo 🛸" */}
+            {/* 1. Comando de Suprimentos (Identificação do Cliente) */}
+            <div
+              style={{
+                backgroundColor: "#121620",
+                border: "1px solid #222d42",
+                borderRadius: "12px",
+                padding: "20px",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#fff",
+                  fontSize: "0.9rem",
+                  fontWeight: "800",
+                  margin: "0 0 8px 0",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                }}
+              >
+                <span>🛸</span> COMANDO DE SUPRIMENTOS
+              </h4>
+              <p
+                style={{
+                  color: "#94a3b8",
+                  fontSize: "0.78rem",
+                  lineHeight: "1.4",
+                  margin: "0 0 12px 0",
+                }}
+              >
+                Sinal recebido, Comandante. Para autorizar o envio imediato dos
+                suprimentos e traçar as coordenadas da sua base, identifique-se:
+              </p>
+              <input
+                type="text"
+                placeholder="Insira seu nome / credencial"
+                value={clientName}
+                onChange={(e) => setClientName(e.target.value)}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#090d14",
+                  border: "1px solid #1e293b",
+                  borderRadius: "8px",
+                  padding: "10px 14px",
+                  color: "#fff",
+                  fontSize: "0.85rem",
+                  outline: "none",
+                }}
+              />
+            </div>
+
+            {/* 2. Rota Interestelar (Cálculo de Frete) */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -382,7 +514,7 @@ function CartPage() {
                   marginBottom: "12px",
                 }}
               >
-                <span style={{ fontSize: "1.3rem" }}>🛸</span>
+                <span style={{ fontSize: "1.2rem" }}>🛸</span>
                 <div>
                   <h4
                     style={{
@@ -392,7 +524,7 @@ function CartPage() {
                       margin: 0,
                     }}
                   >
-                    ENTREGA DE OUTRO MUNDO
+                    ROTA INTERESTELAR
                   </h4>
                   <p
                     style={{
@@ -402,7 +534,7 @@ function CartPage() {
                       fontWeight: "700",
                     }}
                   >
-                    Velocidade interestelar direto para a sua base.
+                    Insira o CEP de destino.
                   </p>
                 </div>
               </div>
@@ -418,15 +550,6 @@ function CartPage() {
                   maxLength={9}
                   value={cep}
                   onChange={handleCepChange}
-                  onFocus={(e) => {
-                    e.currentTarget.style.borderColor = "#00e676";
-                    e.currentTarget.style.boxShadow =
-                      "0 0 15px rgba(0, 230, 118, 0.3)";
-                  }}
-                  onBlur={(e) => {
-                    e.currentTarget.style.borderColor = "#1e293b";
-                    e.currentTarget.style.boxShadow = "none";
-                  }}
                   style={{
                     flex: 1,
                     backgroundColor: "#090d14",
@@ -437,41 +560,22 @@ function CartPage() {
                     fontSize: "0.85rem",
                     outline: "none",
                     letterSpacing: "1px",
-                    transition: "all 0.3s ease",
                   }}
                 />
               </div>
 
               {cepLoading && (
-                <div
+                <span
                   style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "10px",
-                    marginTop: "12px",
+                    color: "#00e676",
+                    fontSize: "0.78rem",
+                    fontWeight: "800",
+                    display: "block",
+                    marginTop: "8px",
                   }}
                 >
-                  <div
-                    style={{
-                      width: "16px",
-                      height: "16px",
-                      border: "2px solid rgba(0,230,118,0.2)",
-                      borderTop: "2px solid #00e676",
-                      borderRadius: "50%",
-                      animation: "spin 0.8s linear infinite",
-                    }}
-                  />
-                  <span
-                    style={{
-                      color: "#00e676",
-                      fontSize: "0.78rem",
-                      fontWeight: "800",
-                      letterSpacing: "0.5px",
-                    }}
-                  >
-                    CONECTANDO COM A NAVE MÃE...
-                  </span>
-                </div>
+                  CONECTANDO COM A NAVE MÃE...
+                </span>
               )}
 
               {addressData && (
@@ -482,8 +586,6 @@ function CartPage() {
                     backgroundColor: "rgba(0,230,118,0.05)",
                     borderRadius: "8px",
                     border: "1px solid rgba(0,230,118,0.3)",
-                    boxShadow: "0 0 15px rgba(0,230,118,0.1)",
-                    animation: "fadeIn 0.4s ease-in-out",
                   }}
                 >
                   <span
@@ -502,7 +604,6 @@ function CartPage() {
                       color: "#cbd5e1",
                       fontSize: "0.78rem",
                       margin: "0 0 8px 0",
-                      lineHeight: "1.4",
                     }}
                   >
                     {addressData.logradouro}, {addressData.bairro} -{" "}
@@ -518,7 +619,7 @@ function CartPage() {
                     }}
                   >
                     <span style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
-                      Frete Expresso (3 dias úteis):
+                      Frete Expresso:
                     </span>
                     <span
                       style={{
@@ -602,7 +703,7 @@ function CartPage() {
               )}
             </div>
 
-            {/* Sumário de Valores */}
+            {/* Sumário de Valores e Ações */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -707,11 +808,7 @@ function CartPage() {
                   Esvaziar
                 </button>
                 <button
-                  onClick={() =>
-                    alert(
-                      "Checkout simulado com sucesso! Obrigado pela compra.",
-                    )
-                  }
+                  onClick={handleFinalizeOrder}
                   style={{
                     backgroundColor: "#00e676",
                     color: "#07090e",
