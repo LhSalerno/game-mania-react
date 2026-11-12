@@ -4,8 +4,21 @@ import { Link } from "react-router-dom";
 import { formatCurrency } from "../utils/formatters";
 
 function Cart() {
-  const { cart, removeFromCart, updateQuantity, totalPrice } =
-    useContext(CartContext);
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    totalPrice,
+    subtotalPrice,
+    discountAmount,
+    shippingCost,
+    couponCodeInput,
+    setCouponCodeInput,
+    applyCoupon,
+    appliedCoupon,
+    couponMessage,
+    removeCoupon,
+  } = useContext(CartContext);
 
   if (cart.length === 0) {
     return (
@@ -264,7 +277,9 @@ function Cart() {
             <div style={{ display: "flex", gap: "8px" }}>
               <input
                 type="text"
-                placeholder="EX: 10OFF"
+                placeholder="EX: ZURG10"
+                value={couponCodeInput}
+                onChange={(e) => setCouponCodeInput(e.target.value)}
                 style={{
                   flex: 1,
                   backgroundColor: "#121214",
@@ -274,9 +289,12 @@ function Cart() {
                   color: "#fff",
                   fontSize: "0.85rem",
                   outline: "none",
+                  textTransform: "uppercase",
                 }}
               />
               <button
+                type="button"
+                onClick={() => applyCoupon(couponCodeInput)}
                 style={{
                   backgroundColor: "#333",
                   color: "#fff",
@@ -291,6 +309,48 @@ function Cart() {
                 APLICAR
               </button>
             </div>
+
+            {/* Mensagem de Feedback */}
+            {couponMessage.text && (
+              <span
+                style={{
+                  fontSize: "0.8rem",
+                  color: couponMessage.isError ? "#ff4d4d" : "#00e676",
+                }}
+              >
+                {couponMessage.text}
+              </span>
+            )}
+
+            {/* Cupom Ativo */}
+            {appliedCoupon && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: "4px",
+                }}
+              >
+                <span style={{ fontSize: "0.8rem", color: "#00e676" }}>
+                  Ativo: <strong>{appliedCoupon.code}</strong>
+                </span>
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "#ff4d4d",
+                    fontSize: "0.75rem",
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                  }}
+                >
+                  Remover
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Resumo do Valor Total e Finalização */}
@@ -301,9 +361,51 @@ function Cart() {
               borderRadius: "8px",
               display: "flex",
               flexDirection: "column",
-              gap: "15px",
+              gap: "10px",
             }}
           >
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.9rem",
+                color: "#b2b2b2",
+              }}
+            >
+              <span>Subtotal:</span>
+              <span>{formatCurrency(subtotalPrice)}</span>
+            </div>
+
+            {discountAmount > 0 && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "0.9rem",
+                  color: "#00e676",
+                }}
+              >
+                <span>Desconto:</span>
+                <span>- {formatCurrency(discountAmount)}</span>
+              </div>
+            )}
+
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                fontSize: "0.9rem",
+                color: "#b2b2b2",
+              }}
+            >
+              <span>Frete:</span>
+              <span>
+                {shippingCost === 0 ? "GRÁTIS" : formatCurrency(shippingCost)}
+              </span>
+            </div>
+
+            <hr style={{ borderColor: "#333", margin: "5px 0" }} />
+
             <div
               style={{
                 display: "flex",
@@ -337,6 +439,7 @@ function Cart() {
                 fontSize: "0.9rem",
                 cursor: "pointer",
                 textAlign: "center",
+                marginTop: "10px",
               }}
             >
               FINALIZAR COMPRA

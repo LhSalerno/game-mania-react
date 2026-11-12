@@ -7,8 +7,8 @@ import Header from "./components/Header";
 import ProductCard from "./components/ProductCard";
 import HeroCarousel from "./components/HeroCarousel";
 
-// Componente da Página Principal (Catálogo com Carrossel e Vitrine Estratégica)
-function Home({ searchTerm, activeCategory, setActiveCategory }) {
+// Componente da Página Principal (Home)
+function Home({ searchTerm, activeCategory }) {
   const { addToCart } = useContext(CartContext);
 
   const filteredProducts = products.filter((product) => {
@@ -119,76 +119,31 @@ function Home({ searchTerm, activeCategory, setActiveCategory }) {
   );
 }
 
-// Componente da Página do Carrinho com Identidade Sci-Fi / Cyberpunk Imersiva
+// Componente da Página do Carrinho (CartPage) Consumindo o Contexto Unificado
 function CartPage() {
-  const { cart, removeFromCart, updateQuantity, clearCart, totalPrice } =
-    useContext(CartContext);
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    subtotalPrice,
+    discountAmount,
+    shippingCost,
+    totalPrice,
+    cep,
+    handleCepChange,
+    addressData,
+    cepLoading,
+    couponCodeInput,
+    setCouponCodeInput,
+    appliedCoupon,
+    couponMessage,
+    applyCoupon,
+    removeCoupon,
+  } = useContext(CartContext);
 
-  const [cep, setCep] = useState("");
-  const [addressData, setAddressData] = useState(null);
-  const [cepLoading, setCepLoading] = useState(false);
-  const [shippingValue, setShippingValue] = useState(null);
-
-  const [couponInput, setCouponInput] = useState("");
-  const [discount, setDiscount] = useState(0);
-  const [couponMessage, setCouponMessage] = useState(null);
-
-  // Estados com os termos imersivos validados
   const [clientName, setClientName] = useState("");
   const [orderDispatched, setOrderDispatched] = useState(false);
-
-  const handleCepChange = async (e) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length > 8) value = value.slice(0, 8);
-
-    if (value.length > 5) {
-      value = `${value.slice(0, 5)}-${value.slice(5)}`;
-    }
-    setCep(value);
-
-    const cleanCep = value.replace(/\D/g, "");
-    if (cleanCep.length === 8) {
-      setCepLoading(true);
-      try {
-        const response = await fetch(
-          `https://viacep.com.br/ws/${cleanCep}/json/`,
-        );
-        const data = await response.json();
-
-        if (!data.erro) {
-          setAddressData(data);
-          setShippingValue(28.5);
-        } else {
-          setAddressData(null);
-          setShippingValue(null);
-          alert("CEP não encontrado na base nacional.");
-        }
-      } catch (error) {
-        console.error("Erro ao consultar CEP:", error);
-      } finally {
-        setCepLoading(false);
-      }
-    } else {
-      setAddressData(null);
-      setShippingValue(null);
-    }
-  };
-
-  const handleApplyCoupon = () => {
-    if (couponInput.trim().toUpperCase() === "ELITE10") {
-      setDiscount(0.1);
-      setCouponMessage({
-        text: "Cupom ELITE10 aplicado com sucesso! (10% OFF)",
-        error: false,
-      });
-    } else {
-      setDiscount(0);
-      setCouponMessage({
-        text: "Cupom inválido ou expirado. (Experimente: ELITE10)",
-        error: true,
-      });
-    }
-  };
 
   const handleFinalizeOrder = () => {
     if (!clientName.trim()) {
@@ -205,16 +160,9 @@ function CartPage() {
       return;
     }
 
-    // Dispara a tela de transmissão concluída com sucesso
     setOrderDispatched(true);
-
-    // Esvazia o carrinho de compras efetivamente no contexto
     clearCart();
   };
-
-  const shippingCost = shippingValue !== null ? shippingValue : 0;
-  const discountAmount = totalPrice * discount;
-  const finalOrderTotal = totalPrice - discountAmount + shippingCost;
 
   return (
     <div style={{ maxWidth: "1200px", margin: "40px auto", padding: "0 24px" }}>
@@ -231,7 +179,6 @@ function CartPage() {
       </h2>
 
       {orderDispatched ? (
-        /* 3. Transmissão Concluída com Sucesso (Tela de Sucesso Imersiva) */
         <div
           style={{
             backgroundColor: "#121620",
@@ -395,7 +342,6 @@ function CartPage() {
                       border: "none",
                       cursor: "pointer",
                       fontWeight: "900",
-                      fontSize: "0.9rem",
                     }}
                   >
                     -
@@ -419,7 +365,6 @@ function CartPage() {
                       border: "none",
                       cursor: "pointer",
                       fontWeight: "900",
-                      fontSize: "0.9rem",
                     }}
                   >
                     +
@@ -442,11 +387,11 @@ function CartPage() {
             ))}
           </div>
 
-          {/* Lado Direito: Comando de Suprimentos, Rota Interestelar, Cupons e Sumário */}
+          {/* Lado Direito: Painéis de Suprimentos, Frete, Cupons e Resumo */}
           <div
             style={{ display: "flex", flexDirection: "column", gap: "20px" }}
           >
-            {/* 1. Comando de Suprimentos (Identificação do Cliente) */}
+            {/* 1. Identificação */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -461,24 +406,10 @@ function CartPage() {
                   fontSize: "0.9rem",
                   fontWeight: "800",
                   margin: "0 0 8px 0",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
                 }}
               >
-                <span>🛸</span> COMANDO DE SUPRIMENTOS
+                🛸 COMANDO DE SUPRIMENTOS
               </h4>
-              <p
-                style={{
-                  color: "#94a3b8",
-                  fontSize: "0.78rem",
-                  lineHeight: "1.4",
-                  margin: "0 0 12px 0",
-                }}
-              >
-                Sinal recebido, Comandante. Para autorizar o envio imediato dos
-                suprimentos e traçar as coordenadas da sua base, identifique-se:
-              </p>
               <input
                 type="text"
                 placeholder="Insira seu nome / credencial"
@@ -497,145 +428,7 @@ function CartPage() {
               />
             </div>
 
-            {/* 2. Rota Interestelar (Cálculo de Frete) */}
-            <div
-              style={{
-                backgroundColor: "#121620",
-                border: "1px solid #222d42",
-                borderRadius: "12px",
-                padding: "20px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  marginBottom: "12px",
-                }}
-              >
-                <span style={{ fontSize: "1.2rem" }}>🛸</span>
-                <div>
-                  <h4
-                    style={{
-                      color: "#fff",
-                      fontSize: "0.9rem",
-                      fontWeight: "800",
-                      margin: 0,
-                    }}
-                  >
-                    ROTA INTERESTELAR
-                  </h4>
-                  <p
-                    style={{
-                      color: "#64748b",
-                      fontSize: "0.72rem",
-                      margin: "2px 0 0 0",
-                      fontWeight: "700",
-                    }}
-                  >
-                    Insira o CEP de destino.
-                  </p>
-                </div>
-              </div>
-
-              <div
-                style={{ display: "flex", gap: "8px", position: "relative" }}
-              >
-                <input
-                  type="text"
-                  name="postal-code"
-                  autoComplete="postal-code"
-                  placeholder="00000-000"
-                  maxLength={9}
-                  value={cep}
-                  onChange={handleCepChange}
-                  style={{
-                    flex: 1,
-                    backgroundColor: "#090d14",
-                    border: "1px solid #1e293b",
-                    borderRadius: "8px",
-                    padding: "10px 14px",
-                    color: "#fff",
-                    fontSize: "0.85rem",
-                    outline: "none",
-                    letterSpacing: "1px",
-                  }}
-                />
-              </div>
-
-              {cepLoading && (
-                <span
-                  style={{
-                    color: "#00e676",
-                    fontSize: "0.78rem",
-                    fontWeight: "800",
-                    display: "block",
-                    marginTop: "8px",
-                  }}
-                >
-                  CONECTANDO COM A NAVE MÃE...
-                </span>
-              )}
-
-              {addressData && (
-                <div
-                  style={{
-                    marginTop: "12px",
-                    padding: "12px",
-                    backgroundColor: "rgba(0,230,118,0.05)",
-                    borderRadius: "8px",
-                    border: "1px solid rgba(0,230,118,0.3)",
-                  }}
-                >
-                  <span
-                    style={{
-                      color: "#00e676",
-                      fontSize: "0.8rem",
-                      fontWeight: "900",
-                      display: "block",
-                      marginBottom: "4px",
-                    }}
-                  >
-                    📍 BASE DE DESTINO VALIDADA:
-                  </span>
-                  <p
-                    style={{
-                      color: "#cbd5e1",
-                      fontSize: "0.78rem",
-                      margin: "0 0 8px 0",
-                    }}
-                  >
-                    {addressData.logradouro}, {addressData.bairro} -{" "}
-                    {addressData.localidade}/{addressData.uf}
-                  </p>
-                  <div
-                    style={{
-                      borderTop: "1px solid rgba(0,230,118,0.15)",
-                      paddingTop: "6px",
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <span style={{ color: "#94a3b8", fontSize: "0.75rem" }}>
-                      Frete Expresso:
-                    </span>
-                    <span
-                      style={{
-                        color: "#00e676",
-                        fontSize: "0.85rem",
-                        fontWeight: "900",
-                      }}
-                    >
-                      {formatCurrency(shippingValue)}
-                    </span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Bloco de Cupom de Desconto */}
+            {/* 2. Frete / CEP com Autocompletar do Navegador */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -649,7 +442,75 @@ function CartPage() {
                   color: "#fff",
                   fontSize: "0.9rem",
                   fontWeight: "800",
-                  margin: "0 0 12px 0",
+                  margin: "0 0 8px 0",
+                }}
+              >
+                ROTA INTERESTELAR (CEP)
+              </h4>
+              <input
+                type="text"
+                name="postal-code"
+                autoComplete="postal-code"
+                placeholder="00000-000"
+                maxLength={9}
+                value={cep}
+                onChange={handleCepChange}
+                style={{
+                  width: "100%",
+                  backgroundColor: "#090d14",
+                  border: "1px solid #1e293b",
+                  borderRadius: "8px",
+                  padding: "10px 14px",
+                  color: "#fff",
+                  fontSize: "0.85rem",
+                  outline: "none",
+                  letterSpacing: "1px",
+                }}
+              />
+              {cepLoading && (
+                <span
+                  style={{
+                    color: "#00e676",
+                    fontSize: "0.78rem",
+                    display: "block",
+                    marginTop: "6px",
+                  }}
+                >
+                  Calculando rota...
+                </span>
+              )}
+              {addressData && (
+                <div
+                  style={{
+                    marginTop: "10px",
+                    padding: "8px",
+                    backgroundColor: "rgba(0,230,118,0.05)",
+                    borderRadius: "6px",
+                  }}
+                >
+                  <span style={{ color: "#00e676", fontSize: "0.78rem" }}>
+                    {addressData.logradouro}, {addressData.bairro} -{" "}
+                    {addressData.localidade}/{addressData.uf}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* 3. Cupons */}
+            <div
+              style={{
+                backgroundColor: "#121620",
+                border: "1px solid #222d42",
+                borderRadius: "12px",
+                padding: "20px",
+              }}
+            >
+              <h4
+                style={{
+                  color: "#fff",
+                  fontSize: "0.9rem",
+                  fontWeight: "800",
+                  margin: "0 0 10px 0",
                 }}
               >
                 CUPOM DE DESCONTO
@@ -657,9 +518,9 @@ function CartPage() {
               <div style={{ display: "flex", gap: "8px" }}>
                 <input
                   type="text"
-                  placeholder="Ex: ELITE10"
-                  value={couponInput}
-                  onChange={(e) => setCouponInput(e.target.value)}
+                  placeholder="EX: ZURG10"
+                  value={couponCodeInput}
+                  onChange={(e) => setCouponCodeInput(e.target.value)}
                   style={{
                     flex: 1,
                     backgroundColor: "#090d14",
@@ -673,7 +534,7 @@ function CartPage() {
                   }}
                 />
                 <button
-                  onClick={handleApplyCoupon}
+                  onClick={() => applyCoupon(couponCodeInput)}
                   style={{
                     backgroundColor: "#1e293b",
                     color: "#fff",
@@ -681,29 +542,54 @@ function CartPage() {
                     padding: "0 16px",
                     borderRadius: "8px",
                     fontWeight: "800",
-                    fontSize: "0.8rem",
                     cursor: "pointer",
                   }}
                 >
                   APLICAR
                 </button>
               </div>
-              {couponMessage && (
+              {couponMessage.text && (
                 <span
                   style={{
                     display: "block",
                     marginTop: "8px",
-                    color: couponMessage.error ? "#ef4444" : "#00e676",
+                    color: couponMessage.isError ? "#ef4444" : "#00e676",
                     fontSize: "0.78rem",
-                    fontWeight: "700",
                   }}
                 >
                   {couponMessage.text}
                 </span>
               )}
+              {appliedCoupon && (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    marginTop: "8px",
+                    alignItems: "center",
+                  }}
+                >
+                  <span style={{ fontSize: "0.8rem", color: "#00e676" }}>
+                    Ativo: <strong>{appliedCoupon.code}</strong>
+                  </span>
+                  <button
+                    onClick={removeCoupon}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#ef4444",
+                      fontSize: "0.75rem",
+                      cursor: "pointer",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    Remover
+                  </button>
+                </div>
+              )}
             </div>
 
-            {/* Sumário de Valores e Ações */}
+            {/* 4. Resumo */}
             <div
               style={{
                 backgroundColor: "#121620",
@@ -725,11 +611,11 @@ function CartPage() {
               >
                 <span>Subtotal:</span>
                 <span style={{ color: "#fff", fontWeight: "700" }}>
-                  {formatCurrency(totalPrice)}
+                  {formatCurrency(subtotalPrice)}
                 </span>
               </div>
 
-              {discount > 0 && (
+              {discountAmount > 0 && (
                 <div
                   style={{
                     display: "flex",
@@ -738,7 +624,7 @@ function CartPage() {
                     fontSize: "0.85rem",
                   }}
                 >
-                  <span>Desconto ({discount * 100}%):</span>
+                  <span>Desconto:</span>
                   <span style={{ fontWeight: "700" }}>
                     - {formatCurrency(discountAmount)}
                   </span>
@@ -755,8 +641,10 @@ function CartPage() {
               >
                 <span>Frete:</span>
                 <span style={{ color: "#fff", fontWeight: "700" }}>
-                  {shippingValue !== null
-                    ? formatCurrency(shippingValue)
+                  {addressData
+                    ? shippingCost === 0
+                      ? "GRÁTIS"
+                      : formatCurrency(shippingCost)
                     : "Informe o CEP"}
                 </span>
               </div>
@@ -786,44 +674,26 @@ function CartPage() {
                     fontWeight: "900",
                   }}
                 >
-                  {formatCurrency(finalOrderTotal)}
+                  {formatCurrency(totalPrice)}
                 </span>
               </div>
 
-              <div style={{ display: "flex", gap: "10px", marginTop: "12px" }}>
-                <button
-                  onClick={clearCart}
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "1px solid #ef4444",
-                    color: "#ef4444",
-                    padding: "10px",
-                    borderRadius: "8px",
-                    fontWeight: "800",
-                    cursor: "pointer",
-                    fontSize: "0.78rem",
-                    flex: 1,
-                  }}
-                >
-                  Esvaziar
-                </button>
-                <button
-                  onClick={handleFinalizeOrder}
-                  style={{
-                    backgroundColor: "#00e676",
-                    color: "#07090e",
-                    border: "none",
-                    padding: "12px",
-                    borderRadius: "8px",
-                    fontWeight: "900",
-                    cursor: "pointer",
-                    fontSize: "0.82rem",
-                    flex: 1.5,
-                  }}
-                >
-                  FINALIZAR COMPRA
-                </button>
-              </div>
+              <button
+                onClick={handleFinalizeOrder}
+                style={{
+                  backgroundColor: "#00e676",
+                  color: "#07090e",
+                  border: "none",
+                  padding: "12px",
+                  borderRadius: "8px",
+                  fontWeight: "900",
+                  cursor: "pointer",
+                  fontSize: "0.85rem",
+                  marginTop: "8px",
+                }}
+              >
+                FINALIZAR COMPRA
+              </button>
             </div>
           </div>
         </div>
@@ -862,7 +732,6 @@ export default function App() {
                   <Home
                     searchTerm={searchTerm}
                     activeCategory={activeCategory}
-                    setActiveCategory={setActiveCategory}
                   />
                 }
               />
