@@ -136,7 +136,8 @@ Projeto desenvolvido por mim, Luis Henrique Salerno, como parte da minha jornada
 
 > "Setor livre de bugs e das armadilhas do Imperador Zurg! Luis Henrique Salerno no comando da nave. Quer recrutar um novo tripulante para o seu time de tecnologia? Acesse os canais abaixo:"
 
-[![GitHub](https://img.shields.io/badge/GitHub-LhSalerno-181717?style=for-the-badge&logo=github)](https://github.com/LhSalerno)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Luis_Henrique_Salerno-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/luis-henrique-salerno-971654b3/)
+[![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/LhSalerno)
+&nbsp;
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/luis-henrique-salerno-971654b3/)
 
 ---
